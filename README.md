@@ -20,5 +20,9 @@ pip install -U -r requirements.txt
 Will use the current directory if none supplied.
 
 ```bash
+# Check command help
+./git_update.py --help
+
+# Running repository updates
 ./git_update.py [DIR]
 ```
