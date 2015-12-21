@@ -11,7 +11,12 @@ The preferred scenario is to use a virtual environment.
 ```bash
 virtualenv venv
 source ./venv/bin/activate
-pip install -U -r requirements.txt
+
+# Install command
+pip install -U .
+
+# For development and testing
+pip install -U -e -r requirements.txt
 ```
 
 
@@ -21,8 +26,8 @@ Will use the current directory if none supplied.
 
 ```bash
 # Check command help
-./git_update.py --help
+update --help
 
 # Running repository updates
-./git_update.py [DIR]
+update [DIR]
 ```
