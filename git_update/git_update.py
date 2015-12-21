@@ -23,13 +23,13 @@ def update_repo(directory):
         repo = Repo(directory)
         log.info('Updating %s', repo)
     except InvalidGitRepositoryError:
-        log.warn('%s is not a valid repository.', directory)
+        log.warning('%s is not a valid repository.', directory)
         return False
 
     try:
         remote = repo.remote()
     except ValueError:
-        log.warn('Check remotes for %s: %s', directory, repo.remotes)
+        log.warning('Check remotes for %s: %s', directory, repo.remotes)
         return False
 
     try:
