@@ -66,6 +66,10 @@ def main(**kwargs):
     dir_list = os.listdir(main_dir)
     log.debug('List of directories: %s', dir_list)
 
+    # Git directory was passed in, not a directory of Git directories
+    if '.git' in dir_list:
+        dir_list = kwargs['dir']
+
     for directory in dir_list:
         update_repo(os.path.join(main_dir, directory))
 
