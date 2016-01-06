@@ -47,7 +47,7 @@ def update_repo(directory):
     try:
         repo = Repo(directory)
         current = {ref: ref.commit for ref in repo.refs}
-        log.info('Updating %s', repo)
+        log.info('Updating %s', repo.git_dir)
     except InvalidGitRepositoryError:
         log.warning('%s is not a valid repository.', directory)
         return False
