@@ -2,8 +2,6 @@
 """Script for updating a directory of repositories."""
 import logging
 import os
-from inspect import getmembers
-from pprint import pformat
 
 import click
 from git import InvalidGitRepositoryError, Repo
@@ -21,6 +19,7 @@ def update_repo(directory):
 
     try:
         repo = Repo(directory)
+        current = {ref: ref.commit for ref in repo.refs}
         log.info('Updating %s', repo)
     except InvalidGitRepositoryError:
         log.warning('%s is not a valid repository.', directory)
@@ -38,8 +37,11 @@ def update_repo(directory):
         log.fatal('Pull failed. %s', error)
         return False
 
-    for count, fetch_info in enumerate(fetch_info_list):
-        log.debug('Fetch info %d:\n%s', count, pformat(getmembers(fetch_info)))
+    for fetch_info in fetch_info_list:
+        log.debug(fetch_info.name)
+        if current[fetch_info.ref] != fetch_info.commit:
+            log.info('%s has updates, %s..%s', fetch_info.name,
+                     current[fetch_info.ref], fetch_info.commit)
 
     return True
 
