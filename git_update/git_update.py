@@ -9,7 +9,13 @@ from git.exc import GitCommandError
 
 
 def check_changes(current, fetch_info_list, branch_list):
-    """Check for changes in local branches and remote."""
+    """Check for changes in local branches and remote.
+
+    Args:
+        current: Dict(reference: commit) from before `git pull` operation.
+        fetch_info_list: List of remote references from `git pull`.
+        branch_list: List of branches in repository.
+    """
     log = logging.getLogger(__name__)
 
     for fetch_info in fetch_info_list:
