@@ -38,7 +38,7 @@ def update_repo(directory):
         return False
 
     for fetch_info in fetch_info_list:
-        log.debug(fetch_info.name)
+        log.debug('Checking for change in %s', fetch_info.name)
         if current[fetch_info.ref] != fetch_info.commit:
             log.info('%s has updates, %s..%s', fetch_info.name,
                      current[fetch_info.ref], fetch_info.commit)
