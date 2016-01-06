@@ -78,7 +78,9 @@ def main(**kwargs):
     By default, the current working directory list is used for finding valid
     repositories.
     """
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(
+        level=logging.INFO,
+        format='[%(levelname)s] %(name)s:%(funcName)s - %(message)s')
 
     log = logging.getLogger(__name__)
 
