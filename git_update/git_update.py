@@ -8,6 +8,27 @@ from git import InvalidGitRepositoryError, Repo
 from git.exc import GitCommandError
 
 
+def check_changes(current, fetch_info_list, branch_list):
+    """Check for changes in local branches and remote."""
+    log = logging.getLogger(__name__)
+
+    for fetch_info in fetch_info_list:
+        log.debug('Checking for change in %s', fetch_info.name)
+
+        if current[fetch_info.ref] != fetch_info.commit:
+            log.info('%s has updates, %s..%s', fetch_info.name,
+                     current[fetch_info.ref], fetch_info.commit)
+
+    for branch in branch_list:
+        log.debug('Checking for change in %s', branch.name)
+
+        if current[branch] != branch.commit:
+            log.info('%s updated, %s..%s', branch.name, current[branch],
+                     branch.commit)
+
+    return True
+
+
 def update_repo(directory):
     """Update a repository.
 
@@ -37,16 +58,7 @@ def update_repo(directory):
         log.fatal('Pull failed. %s', error)
         return False
 
-    for fetch_info in fetch_info_list:
-        log.debug('Checking for change in %s', fetch_info.name)
-        if current[fetch_info.ref] != fetch_info.commit:
-            log.info('%s has updates, %s..%s', fetch_info.name,
-                     current[fetch_info.ref], fetch_info.commit)
-
-    for branch in repo.branches:
-        if current[branch] != branch.commit:
-            log.info('%s updated, %s..%s', branch.name, current[branch],
-                     branch.commit)
+    check_changes(current, fetch_info_list, repo.branches)
 
     return True
 
