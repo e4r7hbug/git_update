@@ -43,6 +43,11 @@ def update_repo(directory):
             log.info('%s has updates, %s..%s', fetch_info.name,
                      current[fetch_info.ref], fetch_info.commit)
 
+    for branch in repo.branches:
+        if current[branch] != branch.commit:
+            log.info('%s updated, %s..%s', branch.name, current[branch],
+                     branch.commit)
+
     return True
 
 
