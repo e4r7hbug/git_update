@@ -47,7 +47,9 @@ def update_repo(directory):
     try:
         repo = Repo(directory)
         current = {ref: ref.commit for ref in repo.refs}
+
         log.info('Updating %s', repo.git_dir)
+
         remote = repo.remote()
         fetch_info_list = remote.pull()
     except InvalidGitRepositoryError:
