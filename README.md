@@ -29,8 +29,8 @@ Will use the current directory if none supplied.
 
 ```bash
 # Check command help
-update --help
+gu --help
 
 # Running repository updates
-update [DIR]
+gu [DIR]
 ```
