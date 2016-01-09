@@ -48,18 +48,14 @@ def update_repo(directory):
         repo = Repo(directory)
         current = {ref: ref.commit for ref in repo.refs}
         log.info('Updating %s', repo.git_dir)
+        remote = repo.remote()
+        fetch_info_list = remote.pull()
     except InvalidGitRepositoryError:
         log.warning('%s is not a valid repository.', directory)
         return False
-
-    try:
-        remote = repo.remote()
     except ValueError:
         log.warning('Check remotes for %s: %s', directory, repo.remotes)
         return False
-
-    try:
-        fetch_info_list = remote.pull()
     except GitCommandError as error:
         log.fatal('Pull failed. %s', error)
         return False
