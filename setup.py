@@ -11,5 +11,5 @@ setup(name='git_update',
       keywords='git update',
       entry_points='''
         [console_scripts]
-        update=git_update.git_update:main
+        update=git_update.__main__:main
 ''', )
