@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(name='git_update',
-      version='0.1',
+      version='1.0',
       description='Update several Git repositories in a directory.',
       author='Nate Tangsurat',
       author_email='e4r7hbug@gmail.com',
