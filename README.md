@@ -17,6 +17,9 @@ pip install -U .
 
 # For development and testing
 pip install -U -e -r requirements.txt
+
+# Or run the package directory
+python -m git_update
 ```
 
 
