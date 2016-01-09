@@ -1,6 +1,7 @@
 """Git repo actions."""
 import logging
 
+import click
 from git import InvalidGitRepositoryError, Repo
 from git.exc import GitCommandError
 
@@ -48,7 +49,7 @@ def update_repo(directory):
         repo = Repo(directory)
         current = {ref: ref.commit for ref in repo.refs}
 
-        log.info('Updating %s', repo.git_dir)
+        click.secho('Updating {0}'.format(repo.git_dir), fg='blue')
 
         remote = repo.remote()
         fetch_info_list = remote.pull()
