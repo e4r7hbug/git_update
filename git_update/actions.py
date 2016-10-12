@@ -75,27 +75,27 @@ def update_repo(directory):
     """Update a repository.
 
     Returns:
-        False if bad repository.
-        True if everything worked.
+        git.repo.base.Repo: Valid Git repository or None.
     """
+    repo = None
+
     try:
         repo = Repo(directory)
+    except InvalidGitRepositoryError:
+        LOG.debug('%s is not a valid repository.', directory)
+    except ValueError:
+        LOG.warning('Check remotes for %s: %s', directory, repo.remotes)
+    except GitCommandError as error:
+        LOG.fatal('Pull failed. %s', error)
+
+    if repo:
         current = {ref: ref.commit for ref in repo.refs}
 
         click.secho('Updating {0}'.format(repo.git_dir), fg='blue')
 
         remote = repo.remote()
         fetch_info_list = remote.pull()
-    except InvalidGitRepositoryError:
-        LOG.debug('%s is not a valid repository.', directory)
-        return False
-    except ValueError:
-        LOG.warning('Check remotes for %s: %s', directory, repo.remotes)
-        return False
-    except GitCommandError as error:
-        LOG.fatal('Pull failed. %s', error)
-        return False
 
-    check_changes(current, remote, fetch_info_list, repo.branches)
+        check_changes(current, remote, fetch_info_list, repo.branches)
 
-    return True
+    return repo
