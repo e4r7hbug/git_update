@@ -105,7 +105,12 @@ def update_repo(directory):
             check_changes(current, remote, fetch_info_list, repo.branches)
         except GitCommandError as error:
             remote_url = repo.git.remote('get-url', remote.name)
-            LOG.fatal(click.style('%s pull failed, check remote: %s = %s', fg='red'), directory, remote, remote_url)
+            LOG.fatal(
+                click.style(
+                    '%s pull failed, check remote: %s = %s', fg='white', bg='red'),
+                directory,
+                remote,
+                remote_url)
             LOG.debug('Pull output: %s', error)
 
     return repo
