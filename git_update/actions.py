@@ -92,8 +92,6 @@ def update_repo(directory):
         LOG.debug('%s is not a valid repository.', directory)
     except ValueError:
         LOG.warning('Check remotes for %s: %s', directory, repo.remotes)
-    except GitCommandError as error:
-        LOG.fatal('Pull failed. %s', error)
 
     if repo:
         current = {ref: ref.commit for ref in repo.refs}
@@ -101,8 +99,13 @@ def update_repo(directory):
         click.secho('Updating {0}'.format(repo.git_dir), fg='blue')
 
         remote = repo.remote()
-        fetch_info_list = remote.pull()
 
-        check_changes(current, remote, fetch_info_list, repo.branches)
+        try:
+            fetch_info_list = remote.pull()
+            check_changes(current, remote, fetch_info_list, repo.branches)
+        except GitCommandError as error:
+            remote_url = repo.git.remote('get-url', remote.name)
+            LOG.fatal(click.style('%s pull failed, check remote: %s = %s', fg='red'), directory, remote, remote_url)
+            LOG.debug('Pull output: %s', error)
 
     return repo
