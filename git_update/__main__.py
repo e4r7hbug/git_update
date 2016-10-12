@@ -13,6 +13,8 @@ def set_logging(ctx, param, value):
     logging_level = (logging.root.getEffectiveLevel() - value * 10) or 1
     logging.basicConfig(level=logging_level, format='[%(levelname)s] %(name)s:%(funcName)s - %(message)s')
 
+    logging.addLevelName(47, 'NOTICE')
+
 
 @click.command()
 @click.option('-v', '--verbose', count=True, callback=set_logging, help='More verbose logging, use multiple times.')
