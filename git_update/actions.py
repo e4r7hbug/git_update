@@ -29,7 +29,7 @@ def crawl(path):
         update_repo(directory)
 
 
-def check_changes(current, fetch_info_list, branch_list):
+def check_changes(current, remote, fetch_info_list, branch_list):
     """Check for changes in local branches and remote.
 
     Args:
@@ -50,13 +50,17 @@ def check_changes(current, fetch_info_list, branch_list):
         except KeyError:
             click.secho('New reference {ref}'.format(ref=fetch_info.name), fg='magenta', dim=True)
 
+    remote_refs = {ref.remote_head: ref for ref in remote.refs}
     for branch in branch_list:
         LOG.debug('Checking for change in %s', branch.name)
 
-        if current[branch] != branch.commit:
+        local_commit = current[branch]
+        remote_commit = remote_refs[branch.name].commit
+
+        if local_commit != remote_commit:
             click.secho(
-                '{branch} updated, {current}..{commit}'.format(
-                    branch=branch.name, current=current[branch], commit=branch.commit),
+                '{branch} updated, {local}..{remote}'.format(
+                    branch=branch.name, local=local_commit, remote=remote_commit),
                 fg='green')
 
     return True
@@ -87,6 +91,6 @@ def update_repo(directory):
         LOG.fatal('Pull failed. %s', error)
         return False
 
-    check_changes(current, fetch_info_list, repo.branches)
+    check_changes(current, remote, fetch_info_list, repo.branches)
 
     return True
