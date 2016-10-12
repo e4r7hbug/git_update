@@ -78,6 +78,29 @@ def check_changes(current, remote, fetch_info_list, branch_list):
     return True
 
 
+def pull(directory=None, repo=None, remote=None):
+    """Perform 'git pull'.
+
+    Args:
+        directory (pathlib.Path): Git path to update.
+        repo (git.repo.base.Repo): Git repository object.
+        remote (git.remote.Remote): First Git Remote found, usually 'origin'.
+    """
+    click.secho('Updating {0}'.format(repo.git_dir), fg='blue')
+
+    current = {ref: ref.commit for ref in repo.refs}
+
+    try:
+        fetch_info_list = remote.pull()
+        check_changes(current, remote, fetch_info_list, repo.branches)
+    except GitCommandError as error:
+        remote_url = repo.git.remote('get-url', remote.name)
+        LOG.fatal(
+            click.style(
+                '%s pull failed, check remote: %s = %s', fg='white', bg='red'), directory, remote, remote_url)
+        LOG.debug('Pull output: %s', error)
+
+
 def update_repo(directory):
     """Update a repository.
 
@@ -100,21 +123,6 @@ def update_repo(directory):
             LOG.warning(click.style('Missing remotes: %s', fg='red'), directory)
 
         if remote:
-            click.secho('Updating {0}'.format(repo.git_dir), fg='blue')
-
-            current = {ref: ref.commit for ref in repo.refs}
-
-            try:
-                fetch_info_list = remote.pull()
-                check_changes(current, remote, fetch_info_list, repo.branches)
-            except GitCommandError as error:
-                remote_url = repo.git.remote('get-url', remote.name)
-                LOG.fatal(
-                    click.style(
-                        '%s pull failed, check remote: %s = %s', fg='white', bg='red'),
-                    directory,
-                    remote,
-                    remote_url)
-                LOG.debug('Pull output: %s', error)
+            pull(directory=directory, repo=repo, remote=remote)
 
     return repo
