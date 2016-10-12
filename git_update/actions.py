@@ -48,7 +48,7 @@ def check_changes(current, fetch_info_list, branch_list):
                     fg='green',
                     dim=True)
         except KeyError:
-            LOG.info('New reference %s', fetch_info.name)
+            click.secho('New reference {ref}'.format(ref=fetch_info.name), fg='magenta', dim=True)
 
     for branch in branch_list:
         LOG.debug('Checking for change in %s', branch.name)
