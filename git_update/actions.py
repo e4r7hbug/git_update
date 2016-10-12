@@ -29,13 +29,13 @@ def crawl(path):
         update_repo(directory)
 
 
-def check_changes(current, remote, fetch_info_list, branch_list):
-    """Check for changes in local branches and remote.
+def check_references(current={}, fetch_info_list=[]):
+    """Check references for updates.
 
     Args:
-        current: Dict(reference: commit) from before `git pull` operation.
-        fetch_info_list: List of remote references from `git pull`.
-        branch_list: List of branches in repository.
+        current (dict): Local references before `git pull`.
+        fetch_info_list (git.util.IterableList): Remote references from `git
+            pull`.
     """
     for fetch_info in fetch_info_list:
         ref_name = fetch_info.name
@@ -57,6 +57,16 @@ def check_changes(current, remote, fetch_info_list, branch_list):
                 fg='green',
                 dim=True)
 
+
+def check_changes(current, remote, fetch_info_list, branch_list):
+    """Check for changes in local branches and remote.
+
+    Args:
+        current: Dict(reference: commit) from before `git pull` operation.
+        fetch_info_list: List of remote references from `git pull`.
+        branch_list: List of branches in repository.
+    """
+    check_references(current=current, fetch_info_list=fetch_info_list)
     remote_refs = {ref.remote_head: ref for ref in remote.refs}
     for branch in branch_list:
         LOG.debug('Checking for change in %s', branch.name)
