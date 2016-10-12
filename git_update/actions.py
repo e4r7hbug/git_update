@@ -72,7 +72,7 @@ def update_repo(directory):
         remote = repo.remote()
         fetch_info_list = remote.pull()
     except InvalidGitRepositoryError:
-        LOG.warning('%s is not a valid repository.', directory)
+        LOG.debug('%s is not a valid repository.', directory)
         return False
     except ValueError:
         LOG.warning('Check remotes for %s: %s', directory, repo.remotes)
