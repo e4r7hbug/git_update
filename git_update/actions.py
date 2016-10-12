@@ -11,7 +11,11 @@ LOG = logging.getLogger(__name__)
 
 
 def crawl(path):
-    """Crawl the path for possible Git directories."""
+    """Crawl the path for possible Git directories.
+
+    Args:
+        path (str): Original path to crawl.
+    """
     main_dir = pathlib.Path(path)
     if not main_dir.is_dir():
         main_dir = main_dir.parent
