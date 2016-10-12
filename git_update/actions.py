@@ -51,7 +51,10 @@ def check_changes(current, fetch_info_list, branch_list):
         LOG.debug('Checking for change in %s', branch.name)
 
         if current[branch] != branch.commit:
-            LOG.info('%s updated, %s..%s', branch.name, current[branch], branch.commit)
+            click.secho(
+                '{branch} updated, {current}..{commit}'.format(
+                    branch=branch.name, current=current[branch], commit=branch.commit),
+                fg='green')
 
     return True
 
