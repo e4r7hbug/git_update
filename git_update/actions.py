@@ -58,15 +58,16 @@ def check_references(current={}, fetch_info_list=[]):
                 dim=True)
 
 
-def check_changes(current, remote, fetch_info_list, branch_list):
-    """Check for changes in local branches and remote.
+def check_branches(branch_list=None, current=None, remote=None):
+    """Check local Branches for changes.
 
     Args:
-        current: Dict(reference: commit) from before `git pull` operation.
-        fetch_info_list: List of remote references from `git pull`.
-        branch_list: List of branches in repository.
+        current (dict): Local references before `git pull`.
+        branch_list (git.util.IterableList): List of branches in repository.
+        remote (git.remote.Remote): First Git Remote found, usually 'origin'.
     """
-    check_references(current=current, fetch_info_list=fetch_info_list)
+    print(type(branch_list))
+    print(type(remote))
     remote_refs = {ref.remote_head: ref for ref in remote.refs}
     for branch in branch_list:
         LOG.debug('Checking for change in %s', branch.name)
@@ -102,7 +103,8 @@ def pull(directory=None, repo=None, remote=None):
 
     try:
         fetch_info_list = remote.pull()
-        check_changes(current, remote, fetch_info_list, repo.branches)
+        check_references(current=current, fetch_info_list=fetch_info_list)
+        check_branches(branch_list=repo.branches, current=current, remote=remote)
     except GitCommandError as error:
         remote_url = repo.git.remote('get-url', remote.name)
         LOG.fatal(
