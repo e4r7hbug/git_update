@@ -58,12 +58,12 @@ def check_references(current={}, fetch_info_list=[]):
                 dim=True)
 
 
-def check_branches(branch_list=None, current=None, remote=None):
+def check_branches(branch_list=None, current={}, remote=None):
     """Check local Branches for changes.
 
     Args:
-        current (dict): Local references before `git pull`.
         branch_list (git.util.IterableList): List of branches in repository.
+        current (dict): Local references before `git pull`.
         remote (git.remote.Remote): First Git Remote found, usually 'origin'.
     """
     print(type(branch_list))
