@@ -21,8 +21,7 @@ def check_changes(current, fetch_info_list, branch_list):
 
         try:
             if current[fetch_info.ref] != fetch_info.commit:
-                log.info('%s has updates, %s..%s', fetch_info.name,
-                         current[fetch_info.ref], fetch_info.commit)
+                log.info('%s has updates, %s..%s', fetch_info.name, current[fetch_info.ref], fetch_info.commit)
         except KeyError:
             log.info('New reference %s', fetch_info.name)
 
@@ -30,8 +29,7 @@ def check_changes(current, fetch_info_list, branch_list):
         log.debug('Checking for change in %s', branch.name)
 
         if current[branch] != branch.commit:
-            log.info('%s updated, %s..%s', branch.name, current[branch],
-                     branch.commit)
+            log.info('%s updated, %s..%s', branch.name, current[branch], branch.commit)
 
     return True
 
