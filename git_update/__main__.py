@@ -8,8 +8,14 @@ import click
 from .actions import update_repo
 
 
+def set_logging(ctx, param, value):
+    """Set logging level based on how many verbose flags."""
+    logging_level = (logging.root.getEffectiveLevel() - value * 10) or 1
+    logging.basicConfig(level=logging_level, format='[%(levelname)s] %(name)s:%(funcName)s - %(message)s')
+
+
 @click.command()
-@click.option('-d', '--debug', help='Set DEBUG level logging.', is_flag=True)
+@click.option('-v', '--verbose', count=True, callback=set_logging, help='More verbose logging, use multiple times.')
 @click.argument('dir', default='.')
 def main(**kwargs):
     """Update repositories in a directory.
@@ -17,14 +23,7 @@ def main(**kwargs):
     By default, the current working directory list is used for finding valid
     repositories.
     """
-    logging.basicConfig(
-        level=logging.INFO,
-        format='[%(levelname)s] %(name)s:%(funcName)s - %(message)s')
-
     log = logging.getLogger(__name__)
-
-    if kwargs['debug']:
-        logging.root.setLevel(logging.DEBUG)
 
     main_dir = kwargs['dir']
     log.info('Finding directories in %s', main_dir)
