@@ -43,8 +43,6 @@ def check_branches(branch_list=None, current={}, remote=None):
         current (dict): Local references before `git pull`.
         remote (git.remote.Remote): First Git Remote found, usually 'origin'.
     """
-    print(type(branch_list))
-    print(type(remote))
     remote_refs = {ref.remote_head: ref for ref in remote.refs}
     for branch in branch_list:
         LOG.debug('Checking for change in %s', branch.name)
