@@ -23,6 +23,7 @@ def crawl(path):
     LOG.info('Finding directories in %s', main_dir)
 
     dir_list = [directory for directory in main_dir.iterdir() if directory.is_dir() and directory.parts[-1] != '.git']
+    dir_list.append(main_dir)
     LOG.debug('List of directories: %s', dir_list)
 
     for directory in dir_list:
