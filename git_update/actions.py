@@ -38,17 +38,24 @@ def check_changes(current, remote, fetch_info_list, branch_list):
         branch_list: List of branches in repository.
     """
     for fetch_info in fetch_info_list:
-        LOG.debug('Checking for change in %s', fetch_info.name)
+        ref_name = fetch_info.name
+
+        LOG.debug('Checking for change in %s', ref_name)
 
         try:
-            if current[fetch_info.ref] != fetch_info.commit:
-                click.secho(
-                    '{ref} has updates, {current}..{commit}'.format(
-                        ref=fetch_info.name, current=current[fetch_info.ref], commit=fetch_info.commit),
-                    fg='green',
-                    dim=True)
+            local_commit = current[fetch_info.ref]
         except KeyError:
-            click.secho('New reference {ref}'.format(ref=fetch_info.name), fg='magenta', dim=True)
+            click.secho('New reference {ref}'.format(ref=ref_name), fg='magenta', dim=True)
+            continue
+
+        remote_commit = fetch_info.commit
+
+        if local_commit != remote_commit:
+            click.secho(
+                '{ref} updated, {local}..{remote}'.format(
+                    ref=ref_name, local=local_commit, remote=remote_commit),
+                fg='green',
+                dim=True)
 
     remote_refs = {ref.remote_head: ref for ref in remote.refs}
     for branch in branch_list:
