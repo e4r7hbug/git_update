@@ -90,27 +90,31 @@ def update_repo(directory):
         repo = Repo(directory)
     except InvalidGitRepositoryError:
         LOG.debug('%s is not a valid repository.', directory)
-    except ValueError:
-        LOG.warning('Check remotes for %s: %s', directory, repo.remotes)
 
     if repo:
-        current = {ref: ref.commit for ref in repo.refs}
-
-        click.secho('Updating {0}'.format(repo.git_dir), fg='blue')
-
-        remote = repo.remote()
+        remote = None
 
         try:
-            fetch_info_list = remote.pull()
-            check_changes(current, remote, fetch_info_list, repo.branches)
-        except GitCommandError as error:
-            remote_url = repo.git.remote('get-url', remote.name)
-            LOG.fatal(
-                click.style(
-                    '%s pull failed, check remote: %s = %s', fg='white', bg='red'),
-                directory,
-                remote,
-                remote_url)
-            LOG.debug('Pull output: %s', error)
+            remote = repo.remote()
+        except ValueError:
+            LOG.warning(click.style('Missing remotes: %s', fg='red'), directory)
+
+        if remote:
+            click.secho('Updating {0}'.format(repo.git_dir), fg='blue')
+
+            current = {ref: ref.commit for ref in repo.refs}
+
+            try:
+                fetch_info_list = remote.pull()
+                check_changes(current, remote, fetch_info_list, repo.branches)
+            except GitCommandError as error:
+                remote_url = repo.git.remote('get-url', remote.name)
+                LOG.fatal(
+                    click.style(
+                        '%s pull failed, check remote: %s = %s', fg='white', bg='red'),
+                    directory,
+                    remote,
+                    remote_url)
+                LOG.debug('Pull output: %s', error)
 
     return repo
