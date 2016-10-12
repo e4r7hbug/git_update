@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 """Script for updating a directory of repositories."""
 import logging
-import os
-from pathlib import Path
 
 import click
 
-from .actions import update_repo
+from .actions import crawl
 
 
 def set_logging(ctx, param, value):
@@ -26,19 +24,7 @@ def main(**kwargs):
     By default, the current working directory list is used for finding valid
     repositories.
     """
-    log = logging.getLogger(__name__)
-
-    main_dir = Path(kwargs['dir'])
-    if not main_dir.is_dir():
-        main_dir = main_dir.parent
-    main_dir = main_dir.resolve()
-    log.info('Finding directories in %s', main_dir)
-
-    dir_list = [directory for directory in main_dir.iterdir() if directory.is_dir() and directory.parts[-1] != '.git']
-    log.debug('List of directories: %s', dir_list)
-
-    for directory in dir_list:
-        update_repo(os.path.join(main_dir, directory))
+    crawl(kwargs['dir'])
 
 
 if __name__ == '__main__':
