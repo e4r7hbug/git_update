@@ -55,7 +55,12 @@ def check_changes(current, remote, fetch_info_list, branch_list):
         LOG.debug('Checking for change in %s', branch.name)
 
         local_commit = current[branch]
-        remote_commit = remote_refs[branch.name].commit
+
+        try:
+            remote_commit = remote_refs[branch.name].commit
+        except KeyError:
+            LOG.debug('Skipping local ref: %s', branch)
+            continue
 
         if local_commit != remote_commit:
             click.secho(
