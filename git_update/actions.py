@@ -26,7 +26,7 @@ def crawl(path):
     LOG.debug('List of directories: %s', dir_list)
 
     for directory in dir_list:
-        update_repo(os.path.join(main_dir, directory))
+        update_repo(directory)
 
 
 def check_changes(current, fetch_info_list, branch_list):
