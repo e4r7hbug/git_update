@@ -42,7 +42,11 @@ def check_changes(current, fetch_info_list, branch_list):
 
         try:
             if current[fetch_info.ref] != fetch_info.commit:
-                LOG.info('%s has updates, %s..%s', fetch_info.name, current[fetch_info.ref], fetch_info.commit)
+                click.secho(
+                    '{ref} has updates, {current}..{commit}'.format(
+                        ref=fetch_info.name, current=current[fetch_info.ref], commit=fetch_info.commit),
+                    fg='green',
+                    dim=True)
         except KeyError:
             LOG.info('New reference %s', fetch_info.name)
 
