@@ -64,7 +64,7 @@ def update_repo(directory):
     repo = None
 
     try:
-        repo = Repo(directory)
+        repo = Repo(str(directory))
     except InvalidGitRepositoryError:
         LOG.debug('%s is not a valid repository.', directory)
 
